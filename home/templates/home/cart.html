@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BookBuy.com</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="/">BookBuy.com</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+	    <ul class="navbar-nav">
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">Contact</a>
+	      </li>
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	          Categories
+	        </a>
+	        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+	          <a class="dropdown-item" href="/books/1">Mathematics</a>
+	          <a class="dropdown-item" href="/books/2">Physics</a>
+	          <a class="dropdown-item" href="/books/3">Chemistry</a>
+	          <a class="dropdown-item" href="/books/4">Computer Sc.</a>
+	        </div>
+	      </li>
+	  </ul>
+	</div>
+	  <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+  <ul class="navbar-nav">
+				{% if isset == True %}
+				<li class="nav-item" style="color:white;">Logged in as {{ user }}</li>
+				{% else %}
+				{% endif %}
+	    &nbsp;
+				{% if isset == True %}
+				<li><a href="{% url 'cart' %}"><i class="fas fa-shopping-cart fa-1x"></i></a></li>
+	&nbsp;
+	</ul>
+	&nbsp;&nbsp;
+	      <a class="btn btn-primary my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+	    {% else %}
+	    {% endif %}
+	  </div>
+	</nav>
+  <br>
+<div class="container">
+  <span style="font-size:25px;">Items in Cart :{{ len_cart}}</span>
+  <br>
+  <br>
+  {% for book in cart_list %}
+  <div class="row">
+    <div class="col-lg-12">
+<div class="card">
+	<div class="row">
+		<div class="col-lg-10">
+<div class="card-header">{{ book.book_name }}</div>
+<div class="card-body">
+  <h5 class="card-title">Rs.{{ book.book_price }}</h5>
+  <p class="card-text">{{ book.book_author }}</p>
+  <a href="/remove/{{ book.un_book_id }}" class="btn btn-primary">Remove</a>
+</div>
+</div>
+<div class="col-lg-2">
+<img class="card-img-top float-right" style="height:200px;width:180px;float:right;" src="{{ book.book_image }}">
+</div>
+</div>
+</div>
+</div>
+</div>
+<br>
+  {% endfor %}
+<hr>
+
+
+{% if len_cart > 0 %}
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-7">
+      <h4><em>Subtotal:</em>&nbsp; : &nbsp;Rs.{{ total }}/-</h4>
+      <h4><em>Delivery Charges</em>&nbsp; : &nbsp;Rs.50/-</h4>
+			<hr>
+      <h3><strong>Amount</strong>&nbsp; : &nbsp;Rs.{{ amt }}/-</h3>
+    </div>
+<div class="col-lg-2">
+<a href="{% url 'confirmation' %}" class="btn btn-success btn-lg">Place Order</a>
+Method Of Payment :
+</div>
+<div class="col-lg-3">
+	<a href="/" class="btn btn-outline-dark btn-lg">Continue Shopping</a>
+	<br>
+	Cash On Delivery
+</div>
+</div>
+</div>
+
+
+{% else %}
+
+{% endif %}
+
+</div>
+
+
+</body>
+</html>
