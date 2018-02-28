@@ -95,7 +95,10 @@
       <h3><strong>Amount</strong>&nbsp; : &nbsp;Rs.{{ amt }}/-</h3>
     </div>
 <div class="col-lg-2">
-<a href="{% url 'confirmation' %}" class="btn btn-success btn-lg">Place Order</a>
+<form method="post" action="{% url 'confirmation' %}">
+	{% csrf_token %}
+	<input class="btn btn-success btn-lg" type="submit" value="Place Order">
+</form>
 Method Of Payment :
 </div>
 <div class="col-lg-3">

@@ -3,6 +3,8 @@ from .forms import RegisterForm,LoginForm
 from .models import User,Book,BookCategory,Cart,Order
 from django.urls import resolve
 from django.http import HttpRequest
+from django.utils import timezone
+
 not_found = False
 # Create your views here.
 current_url = ''
@@ -166,25 +168,39 @@ def remove(request,un_book_id):
 
 
 def confirmation(request):
-	global current_url
-	current_url = '/'
-	order_list = []
-	active_user = request.session['u_id']
-	order_books = Cart.objects.filter(user_id=active_user)
-	for b in order_books:
-		order_list.append(b.order_item)
-	final_str = str(order_list)
-	order_confirm_add = Order(delivery_user_id=active_user,order_items=final_str)
-	order_confirm_add.save()
+	if request.method == 'POST':
+		global current_url
+		current_url = '/'
+		order_list = []
+		active_user = request.session['u_id']
+		order_books = Cart.objects.filter(user_id=active_user)
+		for b in order_books:
+			order_list.append(b.order_item)
+		final_str = str(order_list)
+		order_confirm_add = Order(delivery_user_id=active_user,order_items=final_str)
+		order_confirm_add.save()
 
-	try:
-		if request.session.get('username'):
-			user = request.session['username']
-			isset = True
-		else:
-			user = ''
-			isset = False
-	except:
-		pass
-	context = {'user':user,'isset':isset}
-	return render(request,'home/confirmation.html',context)
+		user_info = User.objects.get(pk=active_user)
+		# order_p_id = Order.objects.get(date_placed=time_of_order).pk
+		order_item_names = []
+		order_item_price = []
+		for oi in order_list:
+			product_name = Book.objects.get(pk=oi)
+			order_item_names.append(product_name.book_name)
+			order_item_price.append(product_name.book_price)
+		date_of_order = timezone.now
+		sub = 0
+		for x in order_item_price:
+			sub = sub + x
+        #------------------------------------------------------------------
+		try:
+			if request.session.get('username'):
+				user = request.session['username']
+				isset = True
+			else:
+				user = ''
+				isset = False
+		except:
+			pass
+		context = {'user':user,'isset':isset,'user_info':user_info,'order_item_names':order_item_names,'date':date_of_order,'sum':sub}
+		return render(request,'home/confirmation.html',context)

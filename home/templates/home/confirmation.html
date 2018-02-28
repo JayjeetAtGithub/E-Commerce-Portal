@@ -71,16 +71,54 @@
   <div class="container-fluid">
     <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">Order Placed Successfully</h1>
-    <!-- <p class="lead">Order ID : </p>
-    <p class="lead">Tentative Arrival:</p> -->
+    <h1 class="display-4" style="color:green;">Order Placed Successfully&nbsp;&nbsp;<i class="fas fa-check"></i></h1>
+    <h4 style="color:green;">Thank you for your order !</h4>
+
+
   </div>
 </div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-lg-6">
+<span style="font-size:25px;">Order details:</span>
+<hr>
+<br>
+<h2>{{ user_info.name  }}</h2>
+<em>{{ user_info.email_id }}</em>
+<br>
+<strong>{{ user_info.shipping_addr }}</strong>
+<br>
+{{ user_info.phone_no }}
+</div>
+<div class="col-lg-6 ">
+<span style="font-size:25px;">Bill details:</span>
+<hr>
+<br>
+Date&nbsp;:&nbsp;{{ date }}
+<br>
+<strong>Item Description:</strong>
+<br>
+<br>
+{% for i in order_item_names %}
+<li>{{ i }}</li>
+{% endfor %}
+<br>
+<h4>Total&nbsp;:&nbsp;Rs.&nbsp;{{ sum }}</h4>
+<h6>Method Of Payment : COD</h6>
 
 
 
 
 
+
+
+
+
+
+</div>
+</div>
+</div>
 
 
 
