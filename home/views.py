@@ -188,7 +188,8 @@ def confirmation(request):
 			product_name = Book.objects.get(pk=oi)
 			order_item_names.append(product_name.book_name)
 			order_item_price.append(product_name.book_price)
-		date_of_order = timezone.now
+		date_of_order = timezone.localtime(timezone.now())
+		date_of_delivery = date_of_order + timezone.timedelta(days=7)
 		sub = 0
 		for x in order_item_price:
 			sub = sub + x
@@ -202,5 +203,5 @@ def confirmation(request):
 				isset = False
 		except:
 			pass
-		context = {'user':user,'isset':isset,'user_info':user_info,'order_item_names':order_item_names,'date':date_of_order,'sum':sub}
+		context = {'user':user,'isset':isset,'user_info':user_info,'order_item_names':order_item_names,'date':date_of_order,'sum':sub,'d_date':date_of_delivery}
 		return render(request,'home/confirmation.html',context)
