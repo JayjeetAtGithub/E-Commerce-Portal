@@ -40,5 +40,5 @@ class Cart(models.Model):
 
 class Order(models.Model):
 	delivery_user_id = models.IntegerField()
-	date_placed = models.DateTimeField(default=timezone.now)
+	date_placed = models.DateTimeField()
 	order_items = models.CharField(max_length=255)

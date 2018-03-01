@@ -177,7 +177,7 @@ def confirmation(request):
 		for b in order_books:
 			order_list.append(b.order_item)
 		final_str = str(order_list)
-		order_confirm_add = Order(delivery_user_id=active_user,order_items=final_str)
+		order_confirm_add = Order(delivery_user_id=active_user,date_placed=timezone.localtime(timezone.now()),order_items=final_str)
 		order_confirm_add.save()
 
 		user_info = User.objects.get(pk=active_user)
