@@ -17,6 +17,55 @@
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
+	  <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+	    <ul class="navbar-nav">
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+	      </li>
+
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">Contact</a>
+	      </li>
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	          Categories
+	        </a>
+	        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+	          <a class="dropdown-item" href="/books/1">Mathematics</a>
+	          <a class="dropdown-item" href="/books/2">Physics</a>
+	          <a class="dropdown-item" href="/books/3">Chemistry</a>
+	          <a class="dropdown-item" href="/books/4">Computer Sc.</a>
+	        </div>
+	      </li>
+	  </ul>
+	&nbsp;
+	  <!-- <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown"> -->
+
+	<ul class="navbar-nav">
+				{% if isset == True %}
+
+				<li class="nav-link" style="color:white;">Logged in as {{ user }}</li>
+
+				{% else %}
+				{% endif %}
+	      &nbsp;&nbsp;
+
+				{% if isset == True %}
+
+				<a class="nav-link" href="{% url 'cart' %}" style="color:white;">Cart&nbsp;<i class="fas fa-shopping-cart fa-1x"></i></a>
+				&nbsp;&nbsp;
+	      <a class="btn btn-primary my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+
+	    {% else %}
+	    {% endif %}
+		</ul>
+	 </div>
+	</nav>
+	<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="/">BookBuy.com</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
 	  <div class="collapse navbar-collapse" id="navbarNavDropdown">
 	    <ul class="navbar-nav">
 	      <li class="nav-item active">
@@ -67,7 +116,7 @@
 	    {% endif %}
 
 	  </div>
-	</nav>
+	</nav> -->
 
 <br>
 
