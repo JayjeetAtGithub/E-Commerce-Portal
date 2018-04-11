@@ -54,7 +54,11 @@
 
 				<a class="nav-link" href="{% url 'cart' %}" style="color:white;">Cart&nbsp;<i class="fas fa-shopping-cart fa-1x"></i></a>
 				&nbsp;&nbsp;
-	      <a class="btn btn-primary my-2 my-sm-0" href="{% url 'logout' %}">Logout</a>
+	      <!-- <a class="btn btn-primary my-2 my-sm-0" href="{% url 'logout' %}">Logout</a> -->
+	      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" name="logout" value="Logout">
+      </form>
 
 	    {% else %}
 	    {% endif %}
@@ -130,7 +134,7 @@
 	<div class="col-lg-3 col-md-6 col-sm-12">
 
 <div class="card" style="width: 18rem; padding:18px; height:600px">
-  <img class="card-img-top" src="{{ book.book_image }}" alt="{{ book.author_name }}">
+  <img class="card-img-top" src="{{ book.book_image.url }}" alt="{{ book.author_name }}">
   <div class="card-body">
     <h5 class="card-title">{{ book.book_name }}</h5>
 		<h6 class="card-subtitle">{{ book.author_name }}</h6>

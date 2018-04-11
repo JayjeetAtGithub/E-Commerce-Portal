@@ -84,14 +84,15 @@ def register(request):
 
 
 def logout(request):
-	try:
-		del request.session['username']
-		del request.session['u_id']
+	if request.method == 'POST':
+		try:
+			del request.session['username']
+			del request.session['u_id']
 
 
 
-	except:
-		pass
+		except:
+			pass
 	print(request.path)
 	return redirect(current_url)
 

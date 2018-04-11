@@ -13,7 +13,7 @@ class Book(models.Model):
 	book_name = models.CharField(max_length=500)
 	author_name = models.CharField(max_length=500)
 	book_description = models.TextField(max_length=500)
-	book_image = models.CharField(max_length=500,default="book image url")
+	book_image = models.FileField(null=True,blank=True)
 	book_price = models.IntegerField()
 
 	def __str__(self):

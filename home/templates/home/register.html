@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Ebooks.com</title>
+	<title>BookBuy.com</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -15,7 +15,7 @@
 		<h1 class="text-center">New Customer Sign Up </h1>
 		<br>
 		<br>
-<form method="post" action="{% url 'register' %}" >
+<form method="post" action="{% url 'register' %}" id="user_reg">
 
 	{% csrf_token %}
 	<h3>Login Information</h3>
@@ -40,7 +40,7 @@
 </form>
 </div>
 <br>
-<footer class="text-center" style="background-color:#404040; position:fixed;bottom:0px;width:100%;" id="footer" >
+<footer class="text-center" style="background-color:#404040; position:relative;bottom:0px;width:100%;" id="footer" >
 	<br>
 <span style="color:white;">
 <a href="https://www.facebook.com/jayjeet.chakraborty.5"><i class="fab fa-facebook-f fa-2x"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -58,5 +58,12 @@
 <br>
 
 </footer>
+<script type="text/javascript">
+	document.getElementById('user_reg').addEventListener('submit',function(){
+          
+          alert('User Registration Successful');
+
+	});
+</script>
 </body>
 </html>
