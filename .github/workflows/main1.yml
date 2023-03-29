@@ -1,0 +1,130 @@
+name: CI
+on:
+  push:
+    branches: [main]
+jobs: 
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2  
+      
+      - run: |
+          mkdir -p logs/
+          echo 'Environment/App/db' > logs/exclude.txt
+      
+      
+      - uses: max/secret-scan@master
+        with:
+          exclude_path: 'logs/exclude.txt'
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build docker-compose
+        run: docker-compose -f ./Environment/App/docker-compose.yml up --build -d
+                
+  sca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2   
+      
+      - run: |
+          mkdir -p logs/
+      - name: Safety
+        run: |
+         pip install safety
+         safety check -r Environment/App/app/flask/requirements.txt > logs/result-safety.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: logs/result.txt   
+          
+      - name: Pyraider
+        run: |
+          pip install pyraider
+          pyraider check -f Environment/App/app/flask/requirements.txt > logs/result-pyraider.txt
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: logs/result.json 
+  sast:
+    needs: [build, sca]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 
+        
+      - run: |
+          mkdir -p logs/      
+      
+      - uses: jpetrucciani/bandit-check@master
+        with:
+          path: './Environment/App/app/flask/chaimtube.py'
+          bandit_flags: '-lll -o logs/output.json -f json'
+    
+      - uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: logs/output.json
+          
+  dast:
+    needs: [build, sca]
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+    
+     - name: Build Image for testing
+       run: docker-compose -f ./Environment/App/docker-compose.yml up --build -d
+ 
+     - name: ZAP Scan
+       uses: zaproxy/action-baseline@v0.6.1
+       with:
+         target: 'http://localhost:5000'
+         cmd_options: '-a'     
+         
+  deploy:
+    needs: [dast,sast]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Environment/App/app/
+          file: ./Environment/App/app/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: khs818/tic4302-demo:latest
+          
+  container-scan:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+     - name: Run Dockle
+       uses: erzz/dockle-action@v1.1.1
+       with:
+         image: khs818/tic4302-demo:latest
+         report-format: json
+         report-name: dockle-report
+        
+     - name: Upload Report
+       uses: actions/upload-artifact@v2
+       if: always()
+       with:
+         name: Dockle Report
+         path: dockle-report.json
